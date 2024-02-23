@@ -12,9 +12,11 @@ app.use(express.json({ limit: '50mb' }))
 
 app.get('/', (req, res) => {
     res.send('hello from DALL-E!')
-})
+}) 
 app.use('/api/v1/post', postRoutes)
 app.use('/api/v1/dalle', dalleRoutes)
+
+
 const startServer = async () => {
     try {
         connectDB(process.env.MONGODB)

@@ -27,8 +27,27 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt })
   }
 
-  const generateImage = () => {
-
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImg(true)
+        const response = await fetch('http://localhost:8888/api/v1/dalle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt: form.prompt })
+        })
+        const data = await response.json()
+        setForm({ ...form, photo: data.photo })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setGeneratingImg(false)
+      }
+    } else {
+      alert('Please enter a prompt')
+    }
   }
 
   return (
@@ -45,7 +64,7 @@ const CreatePost = () => {
             LableName="your name"
             type="text"
             name="name"
-            palceholder="John Doe"
+            palceholder="Khalfi Aymen"
             value={form.name}
             handleChange={handleChange}
           />
@@ -59,25 +78,37 @@ const CreatePost = () => {
             isSurpriseMe
             hanldeSurpriseMe={hanldeSurpriseMe}
           />
-          <div className='relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focuse:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center'>
-            {form.photo ? (
-              <img
-                src={form.photo}
-                alt={form.prompt}
-                className='w-full h-full object-contain'
-              />
-            ) : (
-              <img
-                src={preview}
-                alt='preview'
-                className='w-9/12 h-9/12 object-contain opacity-40'
-              />
-            )}
-            {generatingImg && (
-              <div className='absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg'>
-                <Loader />
-              </div>
-            )}
+          <div
+            className='!w-full flex flex-row justify-start items-center gap-20'>
+            <div className='relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focuse:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center'>
+              {form.photo ? (
+                <img
+                  src={form.photo}
+                  alt={form.prompt}
+                  className='w-full h-full object-contain'
+                />
+              ) : (
+                <img
+                  src={preview}
+                  alt='preview'
+                  className='w-9/12 h-9/12 object-contain opacity-40'
+                />
+              )}
+              {generatingImg && (
+                <div className='absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg'>
+                  <Loader />
+                </div>
+              )}
+            </div>
+            <div className='flex-1 flex justify-start items-start flex-row gap-3 bg-yellow-200 p-4 rounded-md'>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+              </svg>
+              <p className='text-gray-900 font-bold mt-4'>
+                Please wait while the image is being generated. This process may take some time as I am  using a free API module. Thank you for your patience.
+              </p>
+            </div>
+
           </div>
         </div>
 

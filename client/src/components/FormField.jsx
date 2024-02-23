@@ -23,7 +23,6 @@ const FormField = ({ LableName, type, name, palceholder, value, handleChange, is
         placeholder={palceholder}
         value={value}
         onChange={handleChange}
-        readOnly
         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#3639ff] focus:border-[#4649ff] outline-none block w-full p-3'
       />
     </div>
