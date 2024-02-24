@@ -25,7 +25,7 @@ const startServer = async () => {
         })
     } catch (error) {
         console.log(error)
-    }
+    } 
 
 }
 startServer()
